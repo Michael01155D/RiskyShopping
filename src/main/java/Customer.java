@@ -57,11 +57,20 @@ public class Customer {
                 productNames.add(productName);
             }
             while (this.shoppingList.size() < 20) {
-                
+                int randomIndex = (int)Math.floor(Math.random() * (productNames.size()));
+                this.shoppingList.add(productNames.get(randomIndex));
             }
         } catch(Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    public String toString() {
+        String output = this.name +"'s starting budget is " + this.budget + "$ to buy as many of these products as possible:";
+        for (String productName: this.shoppingList) {
+            output += "\n"+ productName;
+        }
+        return output;
+     }
 
 }
