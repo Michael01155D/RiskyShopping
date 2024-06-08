@@ -39,6 +39,10 @@ public class Store {
         return Math.round(price * 100.0) / 100.0;
     }
 
+    public HashMap<String, Double> getProducts() {
+        return this.products;
+    }
+
     public void listProducts () {
         for (String productName: this.products.keySet()) {
             System.out.println("Name: " + productName +" | cost: " + this.products.get(productName));
