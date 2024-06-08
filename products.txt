@@ -1,0 +1,100 @@
+Green Apple
+Red Apple
+Yellow Apple
+Banana
+Pineapple
+Avocado
+Orange
+Bread
+Egg Carton
+1% Milk
+2% Milk
+Greek Yogurt
+Frozen Pizza
+Blueberry Container
+Tomato
+Orange Juice
+Tomato Juice
+Lime
+Lemon
+Kale
+Spaghetti Noodles
+Cottage Cheese
+Swiss Cheese
+Chicken Thigh
+Salami
+Salmon
+Tuna
+Haddock
+Oat Milk
+Cumin
+Basil
+Garlic
+Garlic Powder
+Tomato Sauce
+Lasagna Noodles
+Soy Sauce
+Rice
+Tofu
+Broccoli
+Spinach
+Green Pepper
+Red Pepper
+Yellow Pepper
+White Mushroom
+Shiitake Mushroom
+Corn
+Bag of Carrots
+Lime Bubly
+Strawberry Container
+Chicken Breast
+Frozen Meatballs
+Sugary Cereal
+Low-Sugar Cereal
+Protein Bars
+Oatmeal
+Skim Milk
+Brussels Sprouts
+Box of Tea
+Bag of Ground Coffee
+Jar of Peanuts
+Instant Ramen
+Vegetable Broth
+Gochujang Paste
+Bag of Green Lentils
+Bag of Red Lentils
+Canola Oil
+Vegetable Oil
+Olive Oil
+Steak
+Pork
+Chocolate Ice Cream
+Vanilla Ice Cream
+BBQ Chips
+Soda
+Bag of Potatoes
+Yellow Onion
+Red Onion
+Chickpeas
+Kidney Beans
+Can of Green Peas
+Salad Dressing
+Iceberg Lettuce
+Eggplant
+Dark Chocolate Bar
+Milk Chocolate Bar
+Cough Drops
+Jar of Kimchi
+Ground Beef
+Margarine
+Butter
+Mayonnaise
+Mustard
+Ketchup
+BBQ Sauce
+Dry Cat Food
+Canned Cat Food
+Dry Dog Food
+Dog Treats
+Cat Treats
+Peanut Butter
