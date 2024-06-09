@@ -3,6 +3,7 @@ public class Main {
         Store store = new Store();
         //store.listProducts();
         Customer bob = new Customer("Bob");
-        System.out.println(bob);
+        bob.beginShopping(store);
+        bob.addProduct();
     }
 }
