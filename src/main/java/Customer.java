@@ -14,6 +14,8 @@ public class Customer {
 
     private LinkedList<String> shoppingBasket;
 
+    private boolean isGameOver;
+
     private Scanner inputReader;
 
     private HashSet<String> productsPurchased;
@@ -47,7 +49,7 @@ public class Customer {
     }
 
     public void setCurrentBudget(double newBudget) {
-        this.currentBudget -= newBudget;
+        this.currentBudget = newBudget;
     }
 
     public HashSet<String> getProductsPurchased() {
@@ -131,7 +133,7 @@ public class Customer {
         String nextProduct = finalBasket.removeLast();
         buyOrToss(nextProduct);
         
-        while (!finalBasket.isEmpty()) {
+        while (!finalBasket.isEmpty() && !isGameOver) {
             String input = "";
             while (!input.toLowerCase().trim().equals("y") && !input.equals("n")) {
                 System.out.println("Would you like to continue buying products in the shopping basket? [y/n]");
@@ -162,12 +164,17 @@ public class Customer {
         }
     }
 
+    public void GameOver() {
+        this.isGameOver = true;
+    }
     public void buyProduct(String product) {
         //todo: get product's price from this.currentStore, decrement budget, if budget negative game over, else add to products purchased
         double price = currentStore.getProducts().get(product);
+        System.out.println("the price of " + product + " is : " + price);
         double budget = getCurrentBudget();
         if (price > budget) {
             System.out.println("Uh oh! " + getName() + " went overbudget and left the store. Game over.");
+            GameOver();
             return;
         }
         System.out.println(product + " was paid for successfully.");
@@ -176,14 +183,15 @@ public class Customer {
     }
 
     public void finishShopping() {
-        //todo: see how many items user bought, how much budget is left
         int purchased = getProductsPurchased().size();
         int shoppingListSize = getShoppingList().size();
+        double currentBudget = getCurrentBudget();
         System.out.println(getName() + " finished shopping, let's see the results of today's shopping trip:");
         System.out.println(getName() + " bought " + purchased + " out of " + shoppingListSize + " total.");
         double percent = (purchased * 1.0 / shoppingListSize) * 100.00;
         String evaluation = percent >= 75.00 ? "Well done!" : "Not bad, try to aim for 75% next time!";
         System.out.printf("%.2f%% of products from the shopping list were successfully purchased. %s\n", percent, evaluation);
+        System.out.println("Bob ended up spending $" + (150.00 - currentBudget) + "of the 150$ starting budget.");
     }
 
     public String toString() {
@@ -273,7 +281,7 @@ public class Customer {
      }
 
      public void printCheckoutOptions(String productName) {
-        System.out.println(this.name + "took out the " + productName + " from the top off the basket. Please select an option: ");
+        System.out.println(this.name + " took out the " + productName + " from the top off the basket. Please select an option: ");
         System.out.println("buy : purchase the product.");
         System.out.println("toss : leave the product to be put back to the appropriate shelf");
      }

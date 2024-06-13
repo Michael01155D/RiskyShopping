@@ -2,7 +2,7 @@ public class Main {
     public static void main(String[] args) {
 
          Store store = new Store();
-         //store.listProducts();
+         store.listProducts();
          Customer bob = new Customer("Bob", store);
          bob.beginShopping();
     }
