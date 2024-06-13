@@ -128,7 +128,7 @@ public class Customer {
             return;
         }
         System.out.println("Now arriving at checkout, buy as many items as you can without going overbudget!");
-        String nextProduct = finalBasket.pop();
+        String nextProduct = finalBasket.removeLast();
         buyOrToss(nextProduct);
         
         while (!finalBasket.isEmpty()) {
@@ -140,7 +140,7 @@ public class Customer {
             if (input.equals("n")) {
                 break;
             }
-            nextProduct = finalBasket.pop();
+            nextProduct = finalBasket.removeLast();
             buyOrToss(nextProduct);
         }
         finishShopping();
@@ -183,7 +183,7 @@ public class Customer {
         System.out.println(getName() + " bought " + purchased + " out of " + shoppingListSize + " total.");
         double percent = (purchased * 1.0 / shoppingListSize) * 100.00;
         String evaluation = percent >= 75.00 ? "Well done!" : "Not bad, try to aim for 75% next time!";
-        System.out.printf("%.2f of products from the shopping list were successfully purchased. " +evaluation+ "\n", percent);
+        System.out.printf("%.2f%% of products from the shopping list were successfully purchased. %s\n", percent, evaluation);
     }
 
     public String toString() {
