@@ -44,6 +44,10 @@ public class Customer {
         return this.name;
     }
 
+    public Store getCurrentStore() {
+        return currentStore;
+    }
+
     public double getCurrentBudget() {
         return this.currentBudget;
     }
@@ -204,8 +208,8 @@ public class Customer {
 
      public void beginShopping() {
         System.out.println("Welcome to the store, " + getName() );
+        printShoppingList();
         System.out.println("Your starting budget is, " + getCurrentBudget() + "$");
-        System.out.println("Your shopping list for today is: " + String.join(", ", getShoppingList()) + ".");
         String input;
         while (true) {
             System.out.println("\nPlease enter a valid command, enter 'options' to view all commands");
@@ -219,10 +223,13 @@ public class Customer {
                     printOptions();
                     break;
                 case "list":
-                    System.out.println(getShoppingList());
+                    printShoppingList();
                     break;
                 case "budget":
-                    System.out.println(getCurrentBudget());
+                    System.out.println(getCurrentBudget() + "$");
+                    break;
+                case "prices":
+                    printPrices();
                     break;
                 case "basket":
                     checkTopOfBasket();
@@ -244,10 +251,19 @@ public class Customer {
      }
 
 
+     public void printShoppingList() {
+        System.out.println("Your shopping list for today is: " + String.join(", ", getShoppingList()) + ".");
+     }
+
+     public void printPrices() {
+        getCurrentStore().listProducts();
+     }
+
      public String validateShoppingInput(String input) {
         HashSet<String> validInputs = new HashSet<>();
         validInputs.add("list");
         validInputs.add("budget");
+        validInputs.add("prices");
         validInputs.add("basket");
         validInputs.add("add");
         validInputs.add("remove");
@@ -273,6 +289,7 @@ public class Customer {
         //check list, check budget, check basket, checkout, add item to cart, remove item from cart
         System.out.println("list : check your shopping list");
         System.out.println("budget : check your current budget");
+        System.out.println("prices : view the price of each product on your list");
         System.out.println("basket : check the top two items in your shopping basket");
         System.out.println("add : choose a product to add to the top of your shopping basket");
         System.out.println("remove : remove the product at the top of your shopping basket");
