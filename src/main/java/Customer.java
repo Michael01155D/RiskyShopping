@@ -33,11 +33,11 @@ public class Customer {
         generateShoppingList();
     }
 
-    //default budget is 150$
+    //default budget is 75$
     public Customer (String name, Store store) {
-        //Store's products cost between 12 to 3$, if shopping list is 20 items large
-        //avg cost is then 7.5$. so avg total cost 20 * 7.5 = 150$
-        this(name, 150, store);
+        //Store's products cost between 12 to 3$, if shopping list is 10 items large
+        //avg cost is then 7.5$. so avg total cost 10 * 7.5 = 75$
+        this(name, 75, store);
     }
 
     public String getName() {
@@ -83,7 +83,7 @@ public class Customer {
                 String productName = fileScan.nextLine();
                 productNames.add(productName);
             }
-            while (this.shoppingList.size() < 20) {
+            while (this.shoppingList.size() < 10) {
                 int randomIndex = (int)Math.floor(Math.random() * (productNames.size()));
                 this.shoppingList.add(productNames.get(randomIndex));
             }
@@ -93,13 +93,13 @@ public class Customer {
     }
 
     public void addProduct() {
-        System.out.println(getShoppingList()+"\n");
-        System.out.println("Which product would you like to add to the basket?");
+        printShoppingList();
+        System.out.println("\nWhich product would you like to add to the basket?");
         //todo, make it case insensitive
         String productName = inputReader.nextLine();
         if (getShoppingList().contains(productName)) {
             this.shoppingBasket.addLast(productName);
-            System.out.println("Added " + productName + " to the top of the shopping basket.");
+            System.out.println("\nAdded " + productName + " to the top of the shopping basket.");
         } else {
             System.out.println(productName +" is not on the shopping list!");
         }
@@ -174,7 +174,7 @@ public class Customer {
     public void buyProduct(String product) {
         //todo: get product's price from this.currentStore, decrement budget, if budget negative game over, else add to products purchased
         double price = currentStore.getProducts().get(product);
-        System.out.println("the price of " + product + " is : " + price);
+        System.out.println("the price of " + product + " is : " + price+"$");
         double budget = getCurrentBudget();
         if (price > budget) {
             System.out.println("Uh oh! " + getName() + " went overbudget and left the store. Game over.");
@@ -195,7 +195,7 @@ public class Customer {
         double percent = (purchased * 1.0 / shoppingListSize) * 100.00;
         String evaluation = percent >= 75.00 ? "Well done!" : "Not bad, try to aim for 75% next time!";
         System.out.printf("%.2f%% of products from the shopping list were successfully purchased. %s\n", percent, evaluation);
-        System.out.println("Bob ended up spending $" + (150.00 - currentBudget) + "of the 150$ starting budget.");
+        System.out.println("Bob ended up spending " + (75.00 - currentBudget) + "$ of the 75$ starting budget.");
     }
 
     public String toString() {
@@ -208,8 +208,9 @@ public class Customer {
 
      public void beginShopping() {
         System.out.println("Welcome to the store, " + getName() );
+        printRules();
         printShoppingList();
-        System.out.println("Your starting budget is, " + getCurrentBudget() + "$");
+        printBudget();
         String input;
         while (true) {
             System.out.println("\nPlease enter a valid command, enter 'options' to view all commands");
@@ -226,7 +227,7 @@ public class Customer {
                     printShoppingList();
                     break;
                 case "budget":
-                    System.out.println(getCurrentBudget() + "$");
+                    printBudget();
                     break;
                 case "prices":
                     printPrices();
@@ -250,13 +251,40 @@ public class Customer {
         } 
      }
 
+     public void printRules() {
+        System.out.println("\nRULES: \nThe goal is to successfully buy as many unique items as possible from the shopping list provided.\nOnce you decide to go to the checkout, the items will be removed from"+
+        " the top of shopping basket one at a time (the last item added is the first one taken out).\nEach time an item is removed, you will be given the option to buy it or not, and then to decide whether to take out the next item or finish" +
+        " shopping.\nBe aware that spending more money than the initial budget will cause a game over.\nChoose the order in which you add items to the shopping basket wisely to get as many items from the list as possible while staying within the budget!");
+        System.out.println("\nOnce you finish reading these rules, please press the Enter key to begin shopping!");
+        String hitEnter = this.inputReader.nextLine();
+     }
 
      public void printShoppingList() {
-        System.out.println("Your shopping list for today is: " + String.join(", ", getShoppingList()) + ".");
+        int lineBreakCounter = 3;
+        String outputLine = "";
+        System.out.println("\nYour shopping list is:");
+        for (String item: getShoppingList()) {
+            if (lineBreakCounter == 3 || lineBreakCounter == 2) {
+                outputLine += item +", ";
+                lineBreakCounter--;
+            } else if (lineBreakCounter == 1) {
+                outputLine += item;
+                lineBreakCounter--;
+            } else if (lineBreakCounter == 0) {
+                System.out.println(outputLine);
+                outputLine = "";
+                lineBreakCounter = 3;
+            }
+        }
+        System.out.println("");
      }
 
      public void printPrices() {
         getCurrentStore().listProducts();
+     }
+
+     public void printBudget() {
+        System.out.printf("Your starting budget is: %.2f$\n", getCurrentBudget());
      }
 
      public String validateShoppingInput(String input) {
@@ -288,7 +316,7 @@ public class Customer {
         System.out.println("\n\n**Valid Commands:**");
         //check list, check budget, check basket, checkout, add item to cart, remove item from cart
         System.out.println("list : check your shopping list");
-        System.out.println("budget : check your current budget");
+        System.out.println("budget : check today's budget");
         System.out.println("prices : view the price of each product on your list");
         System.out.println("basket : check the top two items in your shopping basket");
         System.out.println("add : choose a product to add to the top of your shopping basket");
@@ -298,7 +326,7 @@ public class Customer {
      }
 
      public void printCheckoutOptions(String productName) {
-        System.out.println(this.name + " took out the " + productName + " from the top off the basket. Please select an option: ");
+        System.out.println(this.name + " took out the " + productName + " from the top off the basket. Please enter what to do with the product: ");
         System.out.println("buy : purchase the product.");
         System.out.println("toss : leave the product to be put back to the appropriate shelf");
      }

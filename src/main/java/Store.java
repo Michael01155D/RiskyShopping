@@ -44,7 +44,7 @@ public class Store {
 
     public void listProducts () {
         for (String productName: this.products.keySet()) {
-            System.out.println(productName +" | cost: " + this.products.get(productName));
+            System.out.println(productName +" | " + this.products.get(productName)+"$");
         }
     }
 }
