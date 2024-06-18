@@ -8,6 +8,8 @@ public class Customer {
 
     private String name;
 
+    private double startingBudget;
+
     private double currentBudget;
 
     private HashSet<String> shoppingList;
@@ -22,22 +24,25 @@ public class Customer {
 
     private Store currentStore;
 
+    //number of products in list must be <= 100 (#lines in products.txt)
+    private final int LIST_SIZE = 20;
     public Customer(String name, double budget, Store store) {
         this.name = name;
         this.inputReader = new Scanner(System.in);
         this.shoppingList = new HashSet<>();
         this.shoppingBasket = new LinkedList<>();
-        this.currentBudget = budget;
+        //default budget represented by budget arg == -1. 
+        this.startingBudget = budget > 0 ? budget : this.LIST_SIZE * 7.5;
+        this.currentBudget = startingBudget;
         this.productsPurchased = new HashSet<>();
         this.currentStore = store;
         generateShoppingList();
     }
 
-    //default budget is 75$
+    //default budget is avg cost of item (7.5$) times list size
     public Customer (String name, Store store) {
-        //Store's products cost between 12 to 3$, if shopping list is 10 items large
-        //avg cost is then 7.5$. so avg total cost 10 * 7.5 = 75$
-        this(name, 75, store);
+        //Store's products cost between 12 to 3$, avg: 7.5$
+        this(name, -1, store); //pass -1 to default budget to list size * 7.5$
     }
 
     public String getName() {
@@ -46,6 +51,10 @@ public class Customer {
 
     public Store getCurrentStore() {
         return currentStore;
+    }
+
+    public double getStartingBudget() {
+        return this.startingBudget;
     }
 
     public double getCurrentBudget() {
@@ -83,7 +92,7 @@ public class Customer {
                 String productName = fileScan.nextLine();
                 productNames.add(productName);
             }
-            while (this.shoppingList.size() < 10) {
+            while (this.shoppingList.size() < LIST_SIZE) {
                 int randomIndex = (int)Math.floor(Math.random() * (productNames.size()));
                 this.shoppingList.add(productNames.get(randomIndex));
             }
@@ -96,7 +105,7 @@ public class Customer {
         printShoppingList();
         System.out.println("\nWhich product would you like to add to the basket?");
         //todo, make it case insensitive
-        String productName = inputReader.nextLine();
+        String productName = formatProductNameInput(inputReader.nextLine());
         if (getShoppingList().contains(productName)) {
             this.shoppingBasket.addLast(productName);
             System.out.println("\nAdded " + productName + " to the top of the shopping basket.");
@@ -190,16 +199,17 @@ public class Customer {
         int purchased = getProductsPurchased().size();
         int shoppingListSize = getShoppingList().size();
         double currentBudget = getCurrentBudget();
+        double startingBudget = getStartingBudget();
         System.out.println(getName() + " finished shopping, let's see the results of today's shopping trip:");
         System.out.println(getName() + " bought " + purchased + " out of " + shoppingListSize + " total.");
         double percent = (purchased * 1.0 / shoppingListSize) * 100.00;
         String evaluation = percent >= 75.00 ? "Well done!" : "Not bad, try to aim for 75% next time!";
         System.out.printf("%.2f%% of products from the shopping list were successfully purchased. %s\n", percent, evaluation);
-        System.out.println("Bob ended up spending " + (75.00 - currentBudget) + "$ of the 75$ starting budget.");
+        System.out.println("Bob ended up spending " + (startingBudget - currentBudget) + "$ of the " +startingBudget+"$ starting budget.");
     }
 
     public String toString() {
-        String output = this.name +"'s starting budget is " + this.currentBudget + "$ to buy as many of these products as possible:";
+        String output = this.name +"'s starting budget is " + getStartingBudget() + "$ to buy as many of these products as possible:";
         for (String productName: this.shoppingList) {
             output += "\n"+ productName;
         }
@@ -207,7 +217,7 @@ public class Customer {
      }
 
      public void beginShopping() {
-        System.out.println("Welcome to the store, " + getName() );
+        System.out.println("\n\nWelcome to the store, " + getName() );
         printRules();
         printShoppingList();
         printBudget();
@@ -252,7 +262,7 @@ public class Customer {
      }
 
      public void printRules() {
-        System.out.println("\nRULES: \nThe goal is to successfully buy as many unique items as possible from the shopping list provided.\nOnce you decide to go to the checkout, the items will be removed from"+
+        System.out.println("\n     ***RULES***:\n\nThe goal is to successfully buy as many unique items as possible from the shopping list provided.\nOnce you decide to go to the checkout, the items will be removed from"+
         " the top of shopping basket one at a time (the last item added is the first one taken out).\nEach time an item is removed, you will be given the option to buy it or not, and then to decide whether to take out the next item or finish" +
         " shopping.\nBe aware that spending more money than the initial budget will cause a game over.\nChoose the order in which you add items to the shopping basket wisely to get as many items from the list as possible while staying within the budget!");
         System.out.println("\nOnce you finish reading these rules, please press the Enter key to begin shopping!");
@@ -268,14 +278,13 @@ public class Customer {
                 outputLine += item +", ";
                 lineBreakCounter--;
             } else if (lineBreakCounter == 1) {
-                outputLine += item;
-                lineBreakCounter--;
-            } else if (lineBreakCounter == 0) {
+                outputLine += item + ",";
                 System.out.println(outputLine);
                 outputLine = "";
                 lineBreakCounter = 3;
             }
         }
+        if (!outputLine.isEmpty()) {System.out.println(outputLine.substring(0, outputLine.trim().length() -1) + ".");}
         System.out.println("");
      }
 
@@ -296,9 +305,9 @@ public class Customer {
         validInputs.add("add");
         validInputs.add("remove");
         validInputs.add("checkout");
-        while (!validInputs.contains(input)) {
+        while (!validInputs.contains(input.toLowerCase().trim())) {
             printOptions();
-            input = inputReader.nextLine();
+            input = inputReader.nextLine().toLowerCase().trim();
         }
         return input;
      }
@@ -306,7 +315,7 @@ public class Customer {
      public String validateCheckoutInput(String input) {
         while (!input.equals("buy") && !input.equals("toss")) {
             System.out.println("Please enter a valid option (buy or toss)");
-            input = inputReader.nextLine();
+            input = inputReader.nextLine().toLowerCase().trim();
         }
         return input;
      }
@@ -329,6 +338,10 @@ public class Customer {
         System.out.println(this.name + " took out the " + productName + " from the top off the basket. Please enter what to do with the product: ");
         System.out.println("buy : purchase the product.");
         System.out.println("toss : leave the product to be put back to the appropriate shelf");
+     }
+
+     public String formatProductNameInput(String input) {
+        return input.substring(0, 1).toUpperCase() + input.substring(1).trim();
      }
 
 }
